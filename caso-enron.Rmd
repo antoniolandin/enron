@@ -1,0 +1,10 @@
+---
+title: "Caso Enron"
+author: "Antonio Cabrera Landín"
+date: "2024-04-29"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+### 1. Introducción
