@@ -8,3 +8,98 @@ output:
 ---
 
 ### 1. Introducción
+
+#### 1.1. Importar librerías
+
+```{r}
+library(igraph)
+library(dplyr)
+```
+
+#### 1.2. Establecer directorio de trabajo
+
+```{r}
+setwd("/home/antonio/Repos/Enron")
+```
+
+#### 1.3. Cargar datos
+
+Vamos a cargar el grafo separado por comunidades que generamos anteriormente en clase.
+
+```{r}
+load("04_comunidades.rda")
+```
+
+### 2. Análisis de las comunidades
+
+Podemos ver que cada nodo tiene un atributo llamado `community` que indica a qué comunidad pertenece.
+
+```{r}
+head(nodes.def)
+```
+
+#### 2.1. Frecuencia de nodos por comunidad
+
+En total, hay 10 comunidades de las cuales la comunidad 2 es la más grande.
+
+```{r}
+barplot(table(nodes.def$community), main = "Número de nodos por comunidad", xlab = "Comunidad", ylab = "Número de nodos", col = "skyblue")
+```
+
+#### 2.2. Importancia de la comunidad
+
+En los nodos, con el atributo `status.x` podemos hacernos una idea de la importancia de cada nodo en la jerarquía de la empresa.
+
+```{r}
+unique(nodes.def$status.x)
+```
+
+Definimos una lista con los cargos de menor a mayor importancia.
+
+```{r}
+status_importance <- c("Employee", "Trader", "In House Lawyer", "Manager", "Director", "Managing Director", "Vice President", "President", "CEO")
+```
+
+Ahora le daremos una puntuación a cada nodo en función de su importancia en la jerarquía de la empresa.
+
+```{r}
+nodes.def$importance <- match(nodes.def$status.x, status_importance)
+
+# Mostramos la importancia con el nombre, el cargo y la comunidad a la que pertenece.
+head(nodes.def %>% select(nombre_completo, status.x, community, importance))
+```
+
+Ahora, calculamos la importancia media de cada comunidad.
+
+```{r}
+# Eliminamos los nodos con importancia NA
+nodes.def <- nodes.def %>% filter(!is.na(importance))
+
+# Calculamos la importancia media de cada comunidad
+importance_by_community <- nodes.def %>% 
+  group_by(community) %>% 
+  summarise(importance = mean(importance))
+
+# Hacemos un gráfico de barras con la importancia media de cada comunidad
+barplot(importance_by_community$importance, main = "Importancia media de cada comunidad", xlab = "Comunidad", ylab = "Importancia media", col = "skyblue")
+```
+
+Vemos que la comunidad 9 es la más importante.
+
+### 3. Estudio de una comunidad
+
+Vamos a estudiar la comunidad 9.
+
+```{r}
+community_9 <- nodes.def %>% filter(community == 9)
+```
+
+#### 3.1. Nodos con mayor tráfico
+
+Vamos a ver los nodos con mayor tráfico de la comunidad 9.
+
+```{r}
+
+
+
+```
